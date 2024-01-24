@@ -4,12 +4,28 @@
 // var currentDay = $("#currentDay");
 
 var currentDay = dayjs();
-console.log(currentDay)
 $("#currentDay").text(currentDay.format("D MMMM YYYY"));
 
 
 var timeSpace = document.getElementById("#inputGroup-sizing-lg");
-console.log(timeSpace)
+var timeBlock = document.querySelectorAll(".input-group");
+var savedText = document.querySelector(".input-group-text");
+var saveBtn = document.querySelectorAll(".save");
+
+$(".input-group").each(function() {
+  var button = $("<button/>")
+  button.text("Save");
+  console.log(this);
+  $(button). attr('class', 'save');
+  $(this).append(button);
+});
+
+$(".save").on("click",function() {
+var input = $(this).siblings(".form-control").val()
+var localStorageKey = $(this).siblings(".form-control").attr("id")
+console.log(localStorageKey)
+localStorage.setItem(localStorageKey, input)
+});
 
 function generateOneHourSlots(startTime, endTime) {
   const slots = [];
@@ -25,13 +41,10 @@ function generateOneHourSlots(startTime, endTime) {
 }
 
 // Example: Generate one-hour slots from 9 am to 5 pm
-const startTime = '2024-01-21 08:00'; // Replace with your desired start time
-const endTime = '2024-01-21 19:00';   // Replace with your desired end time
+const startTime = '2024-01-21 08:00'; 
+const endTime = '2024-01-21 19:00';   
 
 const oneHourSlots = generateOneHourSlots(startTime, endTime);
-
-// Display the one-hour slots
-console.log(oneHourSlots);
 
 var textInput = function() {
   for(var index = 0; index < oneHourSlots.length; index++) 
@@ -44,13 +57,12 @@ textInput()
 
 // Colouring based on time
  var timeHour = (currentDay.format(" HH "));
- console.log(timeHour)
- var timeAssign = function() {
+  var timeAssign = function() {
   for(var index = 0; index < oneHourSlots.length; index++) 
   {
     var timeNow = parseInt(timeHour);
     var slotOneHour = parseInt(oneHourSlots[index].substr(0, 2));
-    if(timeNow< slotOneHour){
+    if(timeNow < slotOneHour){
       $( ".form-control" + index).addClass("future")
     }
     else if(timeNow == slotOneHour){
@@ -60,9 +72,10 @@ textInput()
     $( ".form-control" + index).addClass("past")
     }
   }
-
   };
   timeAssign();
+
+
 
 
 
